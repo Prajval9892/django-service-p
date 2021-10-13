@@ -1,0 +1,195 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+{% csrf_token %}
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+
+    <title>Hello, world!</title>
+    {% block head %}{% endblock head %}
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+            <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+                <a class="navbar-brand" href="#">Hidden brand</a>
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'home' %}">Home</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link disabled">About</a>
+                    </li>
+                    {% if user.is_authenticated %}
+
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="/add_service">Add Service</a>
+                    </li>
+                    {% endif %}
+                </ul>
+                <form class="d-flex" method="POST" action="{% url 'search' %}">
+                    {% csrf_token %}
+                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" id="mysearch" name="mysearch">
+                    <button class="btn btn-outline-success" type="submit">Search</button>
+                </form>
+
+                {% if user.is_authenticated %}
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                   Wellcome {{request.user.username}}
+                 </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                        <li><a class="dropdown-item" href="/logout">Logout</a></li>
+                        <li><a class="dropdown-item" href="{% url 'profile' %}">MyProfile</a></li>
+
+                    </ul>
+                </div>
+
+
+
+                {% else %}
+
+
+
+                <button type="button" class="btn btn-outline-success" data-bs-target="#log_in" data-bs-toggle="modal">Log-in</button>
+                <button type="submit" class="btn btn-outline-success" data-bs-target="#sign_up" data-bs-toggle="modal">sign-up</button> {% endif %}
+
+                <!-- Button trigger modal -->
+
+
+
+
+
+
+            </div>
+
+
+
+            <!--log-in -->
+            <div class="modal fade" id="log_in" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Sign-In</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <!--form-->
+                            <form action='/login' method='post'>
+
+                                <div class="mb-3">
+                                    <label for="username" class="form-label">Username</label>
+                                    <input type="text" class="form-control" id="username" name="logusername" placeholder="Username">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="password" class="form-label">First Name</label>
+                                    <input type="password" class="form-control" id="password" name="logpassword" placeholder="Firstname">
+                                </div>
+
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-primary">Login</button>
+                                <a href="{% url 'reset_password' %}">Forgot password?</a>
+                            </form>
+
+
+                        </div>
+                        <div class="modal-footer">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Button trigger modal -->
+
+
+            <!--sign up Modal -->
+            <div class="modal fade" id="sign_up" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Sign-In</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <!--form-->
+                            <form action='/signup' method='POST'>
+
+                                <div class="mb-3">
+                                    <label for="username" class="form-label">Username</label>
+                                    <input type="text" class="form-control" id="username" name="username" placeholder="Username" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="firstname" class="form-label">First Name</label>
+                                    <input type="text" class="form-control" id="firstname" name="firstname" placeholder="Firstname" required>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="lastname" class="form-label">Last Name</label>
+                                    <input type="text" class="form-control" id="lastname" name="lastname" placeholder="Lastname" required>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="email" class="form-label">Email address</label>
+                                    <input type="email" class="form-control" id="email" placeholder="email">
+                                </div>
+
+
+                                <div class="mb-3">
+                                    <label for="password" class="form-label">choose a Password</label>
+                                    <input type="password" class="form-control" id="password" name="password" placeholder="Choose your password" required>
+                                </div>
+
+
+                                <div class="mb-3">
+                                    <label for="pass2" class="form-label">Confirm Password</label>
+                                    <input type="text" class="form-control" id="pass2" name="pass2" placeholder="Enter your password again" required>
+                                </div>
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-primary">Sign-Up</button>
+                            </form>
+
+
+                        </div>
+                        <div class="modal-footer">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+    </nav>
+
+
+
+    </div>
+
+    {% block main %}{% endblock main %}
+
+    <!-- Optional JavaScript; choose one of the two! -->
+
+    <!-- Option 1: Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
+
+    <!-- Option 2: Separate Popper and Bootstrap JS -->
+    <!--
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js" integrity="sha384-W8fXfP3gkOKtndU4JGtKDvXbO53Wy8SZCQHczT5FMiiqmQfUpWbYdTil/SxwZgAN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.min.js" integrity="sha384-skAcpIdS7UcVUC05LJ9Dxay8AXcDYfBJqt1CJ85S/CFujBsIzCIv+l9liuYLaMQ/" crossorigin="anonymous"></script>
+    -->
+</body>
+
+</html>

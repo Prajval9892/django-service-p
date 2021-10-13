@@ -1,0 +1,114 @@
+{% extends 'base.html' %} {% block main %}
+
+
+<!-----------------------------------      Upper part                              ------------------------------------>
+
+
+<img src="{{ post.cover.url }}" class="img-thumbnail" alt="..."><br><br>
+<span class="text-info">Title:</span>
+<h3 style="color:black">
+    <span>{{ post.title }}</span></h3>
+<br>
+<hr>
+<span class="text-info">{{ post.body }}</span>
+</br>
+<hr>
+<hr>
+<form action="{% url 'like_post' post.pk %}" method="POST">
+    {% if like %} <button class="btn btn-outline-danger" type="submit">Unlike</button>{% csrf_token %} {% else %}
+    <button class="btn btn-outline-success" type="submit">Like</button>{% csrf_token %} {% endif %} <span style="color:red">{{ post.liked }}</span>{% csrf_token %}
+</form>
+<span class="text-info">Service-created:-</span>
+<span style="color:red">{{ post.created }}
+            <br>
+            <span class="text-info">Created by</span>
+<span style="color:green">{{ userr.username }}
+            <br>
+            <br>
+      
+    
+            </form> 
+            <hr>
+            <hr>
+            
+<!----------------------------------- Add Querry par    ------------------------------------>
+            {% if user.is_authenticated %}
+            <h3>Querrys</h1>
+            {% csrf_token %}
+            <form action="{% url 'add_querry' post.pk%}" method='post'>
+
+                <div class="form-floating">
+
+                    <textarea class="form-control" placeholder="Leave your Querry" name="logusername" style="height: 100px;"></textarea>
+                    <label for="logusername">Querry</label>
+                </div>
+                
+
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary">Add Querry</button>
+            </form>
+            {% else %}
+            <h3>Login or Register yourself for adding any Query</h3>
+            {% endif %}
+            <br><br>
+
+
+        
+<!-----------------------------------         Listing Qurry                           ------------------------------------>
+              <h3 style="color: darkgoldenrod;">List of Querrys</h3>
+            {% for query in querrys  %}
+            <hr>
+            <div class="row g-2">
+                <div class="col-sm-7">
+                   
+                    <div style="background-color: green; margin-right: 40%;">
+                  <p style="color:black; font-family: Georgia, 'Times New Roman', Times, serif;">{{ query.content }}</p>
+                </div>
+                <div class="col-sm-7">
+                    <div style="background-color:grey; margin-left: 40%;">
+                  <p style="color:black; font-family: Georgia, 'Times New Roman', Times, serif;">{{ query.Answer }}</p>
+                </div>
+                
+                </div>
+                <div class="col-sm-7">
+                Date: {{ query.date_created }}
+                </div>
+                
+            </div>
+                
+
+
+                
+<!-----------------------------------                   Showing Answer                 ------------------------------------>
+               
+                <!-- Button trigger modal -->
+{% if hider %}
+
+
+                <!--form-->
+                <form action='{% url 'add_anss' query.pk%}' method='post'>
+
+                   <div class="form-floating">
+
+                    <textarea class="form-control" placeholder="Leave your Querry" name="myans" style="height: 50px;"></textarea>
+                    <label for="logusername">Answer</label>
+                </div>
+                   
+
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-primary">Add Answer</button>
+                </form>
+
+
+            </div>
+            <div class="modal-footer">
+
+            </div>
+        </div>
+    
+
+{% endif %}
+            {% endfor %}
+            
+    </li>
+    {% endblock main %}
